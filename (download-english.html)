@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download English - Mikyla</title>
+  <style>
+    body {
+      background: #0a0e2a;
+      color: white;
+      font-family: system-ui, sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+      margin: 0;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #94a3b8;
+      margin-bottom: 30px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #4ade80;
+      color: #000;
+      font-size: 1.15rem;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Mikyla and the Frostveil Kingdom</h1>
+  <p>English Version • 46 Pages</p>
+
+  <a class="btn" href="books/Mikyla_English_REAL_BOOK_46Pages_0.7MB.pdf" download>
+    📥 Download English Book
+  </a>
+</body>
+</html>
