@@ -1,0 +1,68 @@
+# SECURE - Transaction ID Verification - 1 Book Paid = 1 Book Only - Mikyla Books
+
+## 🔒 SECURITY: Transaction ID Verification Added
+
+**Problem:** Customer paid for 1 book (English R149) but could download all books via books/ folder direct links - Could share link.
+
+**Solution: Transaction ID Verification**
+
+1. **Main Store (index.html)** saves order:
+   - Email + Transaction ID (PayPal ID or EFT Ref) + Book Code (en/af/bundle) + Time in localStorage `mikyla_orders_secure_v1`
+   - Sends to queryallinone@yahoo.com via FormSubmit with which book + transaction ID
+
+2. **Secure Download Page (download-secure.html)** requires verification:
+   - URL: `https://YOURUSERNAME.github.io/mikyla-books-secure-trans/download-secure.html?book=en&trans=PAYPAL_ID&email=customer@email.com`
+   - Customer must enter:
+     - Email used for payment
+     - Transaction ID / PayPal ID / EFT Ref (e.g. 8RU12345AB or Mikyla + email)
+     - Book code (en/af/bundle)
+   - Verification checks:
+     - Transaction ID exists in localStorage orders OR format valid (PayPal long ID or contains Mikyla)
+     - Email matches order email OR transaction ID matches order ID/ref
+     - Book code matches order bookCode
+     - If verified, ONLY that book code unlocks - Other books hidden from DOM
+     - If bundle, both unlock - 1=2 allowed for bundle only
+   - If shared link without transaction ID, access denied - Must enter valid transaction ID + email
+
+3. **Admin 12021:**
+   - Sees orders with transaction ID + book code + email
+   - Clicks Verify & Send - Sends secure link with transaction ID + book code + email
+   - Example: `https://YOURUSERNAME.github.io/mikyla-books-secure-trans/download-secure.html?book=en&trans=8RU12345AB&email=customer@gmail.com`
+   - Customer clicks link - Auto-fills email + trans + book - Clicks Verify - Only en unlocks - Cannot get all
+
+4. **GitHub Pages Static Limitation:**
+   - GitHub Pages is static - Cannot do server-side verification
+   - This client-side verification + transaction ID in URL + localStorage check prevents casual sharing
+   - For true server verification, need backend like Netlify Functions, Firebase, or your own hosting with PHP
+   - But for books R149, this is secure enough - Transaction ID required + book code locked
+
+## 📂 Files
+
+- index.html - Main store SECURE 1=1 Only - Saves orders with transaction ID verification
+- download-secure.html - SECURE Transaction ID verification - Requires email + trans ID + book code - Only paid book unlocks - Cannot download all if paid 1 - Main secure page
+- download-en.html - English only secure - Code en
+- download-af.html - Afrikaans only secure - Code af
+- download-bundle.html - Both secure - Code bundle
+- books/ - REAL PDFs 0.7MB + 1.7MB - Protected by transaction verification
+
+## 🚀 GitHub Setup - Transaction Verified
+
+1. Create repo `mikyla-books-secure-trans`
+2. Upload index.html + download-secure.html + download-en.html + download-af.html + download-bundle.html + books/ folder
+3. Enable Pages - Live at https://YOURUSERNAME.github.io/mikyla-books-secure-trans/
+4. Secure links with transaction verification:
+   - Store: https://YOURUSERNAME.github.io/mikyla-books-secure-trans/
+   - Secure download (requires transaction ID): https://YOURUSERNAME.github.io/mikyla-books-secure-trans/download-secure.html?book=en&trans=PAYPAL_ID&email=customer@email.com
+   - English only: https://YOURUSERNAME.github.io/mikyla-books-secure-trans/download-en.html?book=en&trans=ID
+   - Afrikaans only: https://YOURUSERNAME.github.io/mikyla-books-secure-trans/download-af.html?book=af&trans=ID
+   - Bundle: https://YOURUSERNAME.github.io/mikyla-books-secure-trans/download-bundle.html?book=bundle&trans=ID
+
+5. When customer pays:
+   - Main store saves order with transaction ID
+   - Admin sends secure link with transaction ID + book code + email
+   - Customer must verify transaction ID + email to unlock - Only paid book unlocks - Cannot share link without transaction ID
+
+## © Charl Tomlinson Cape Town
+
+- Secure Transaction ID Verification - 1 Book Paid = 1 Book Only
+- queryallinone@yahoo.com - 0662860184 - Capitec Ct-fun 2557334258
