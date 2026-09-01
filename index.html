@@ -110,6 +110,33 @@ SECURE - 1 Book Paid = 1 Book Only
 <div id="sendStatus" style="font-size:7px;margin-top:3px;color:#4ade80"></div>
 <div id="emailPreview" style="font-size:7px;margin-top:4px;background:#0006;padding:4px;border-radius:4px;white-space:pre-wrap;max-height:100px;overflow:auto"></div>
 </div>
+
+<div style="margin-top:8px;background:#0f766e22;border:1px solid #0f766e55;padding:6px;border-radius:8px">
+<h4 style="font-size:9px;color:#5eead4">🧪 ADMIN FREE TEST & DOWNLOAD (No payment)</h4>
+<p style="font-size:6px;color:#94a3b8">Test unlock + download any book for free. Uses same secure download functions.</p>
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin:4px 0">
+<button class="btn gold" style="font-size:8px;padding:4px 8px" onclick="adminFreeUnlock('en')">🆓 Free Unlock English</button>
+<button class="btn gold" style="font-size:8px;padding:4px 8px" onclick="adminFreeUnlock('af')">🆓 Free Unlock Afrikaans</button>
+<button class="btn gold" style="font-size:8px;padding:4px 8px" onclick="adminFreeUnlock('bundle')">🆓 Free Unlock Bundle</button>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:4px;margin:4px 0">
+<button class="btn dark" style="font-size:8px;padding:4px 8px" onclick="downloadRealPdf('en')">📥 Download English PDF (base64)</button>
+<button class="btn dark" style="font-size:8px;padding:4px 8px" onclick="downloadRealPdf('af')">📥 Download Afrikaans PDF (base64)</button>
+<button class="btn dark" style="font-size:8px;padding:4px 8px" onclick="downloadNewFullPdf()">📥 Download NEW Full Frostveil PDF (file)</button>
+</div>
+<p style="font-size:6px;color:#facc15;margin-top:3px">NEW PDF: Place <b>MIKYLA-Frostveil-Kingdom-FULL-BUNDLED-Book.pdf</b> next to index.html on Netlify/GitHub for the full quality English download.</p>
+</div>
+
+<div style="margin-top:8px;background:#1e293b;border:1px solid #ffffff22;padding:6px;border-radius:8px">
+<h4 style="font-size:9px">⚙️ EmailJS Auto-Reply Config (optional)</h4>
+<p style="font-size:6px;color:#94a3b8">If set, SEND uses EmailJS. If empty, falls back to FormSubmit. Your emails are already connected.</p>
+<input id="ejService" class="input" placeholder="EmailJS Service ID (e.g. service_xxxxx)" style="font-size:8px">
+<input id="ejTemplate" class="input" placeholder="EmailJS Template ID (e.g. template_xxxxx)" style="font-size:8px">
+<input id="ejPublic" class="input" placeholder="EmailJS Public Key" style="font-size:8px">
+<button class="btn gold" style="font-size:8px;margin-top:3px" onclick="saveEmailJSCfg()">💾 Save EmailJS Config</button>
+<div id="ejStatus" style="font-size:7px;margin-top:3px;color:#4ade80"></div>
+</div>
+
 <button class="btn dark" style="margin-top:4px;font-size:8px" onclick="closeAdmin()">Close Admin Secure</button>
 </div></div></div>
 
@@ -167,6 +194,41 @@ function dlB64(b64, name, mime){
 }
 function downloadRealCover(type){dlB64(type==='en'?enCoverB64.replace('data:image/jpeg;base64,',''):afCoverB64.replace('data:image/jpeg;base64,',''),'Mikyla_'+(type==='en'?'English':'Afrikaans')+'_Cover_REAL_Charl_Tomlinson.jpg','image/jpeg');}
 function downloadRealPdf(type){dlB64(type==='en'?enPdfB64:afPdfB64,'Mikyla_'+(type==='en'?'English_46Pages_0.7MB_SECURE_ONLY_'+(cart[0]?.code||type):'Afrikaans_46Bladsye_1.7MB_SECURE_ONLY_'+(cart[0]?.code||type))+'_REAL_BOOK_Charl_Tomlinson_Cape_Town_SECURE.pdf','application/pdf');}
+function downloadNewFullPdf(){
+  const a=document.createElement('a');
+  a.href='MIKYLA-Frostveil-Kingdom-FULL-BUNDLED-Book.pdf';
+  a.download='Mikyla_English_Frostveil_Kingdom_FULL_COLOUR_SECURE_Charl_Tomlinson.pdf';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  document.getElementById('sendStatus') && (document.getElementById('sendStatus').innerHTML='📥 Trying NEW Full Frostveil PDF (make sure the PDF file is uploaded next to index.html on Netlify)');
+}
+function adminFreeUnlock(code){
+  const trans='ADMIN-FREE-TEST-'+Date.now();
+  unlockWithBook(code,trans,'Admin 12021 FREE TEST - No payment - Code: '+code);
+  closeAdmin();
+  alert('FREE TEST unlocked for code: '+code+'\nScroll down to download buttons.\nTrans: '+trans);
+}
+function saveEmailJSCfg(){
+  const service=document.getElementById('ejService').value.trim();
+  const template=document.getElementById('ejTemplate').value.trim();
+  const publicKey=document.getElementById('ejPublic').value.trim();
+  const cfg={service,template,publicKey};
+  localStorage.setItem('emailjs_cfg',JSON.stringify(cfg));
+  document.getElementById('ejStatus').innerHTML=service&&template&&publicKey?'✅ EmailJS config saved - SEND will use EmailJS':'⚠️ Incomplete - will keep using FormSubmit backup';
+  if(service&&template&&publicKey && typeof emailjs!=='undefined'){
+    try{emailjs.init({publicKey:publicKey});document.getElementById('ejStatus').innerHTML+=' | EmailJS initialized';}catch(e){document.getElementById('ejStatus').innerHTML+=' | Init error: '+e;}
+  }
+}
+function loadEmailJSCfg(){
+  const cfg=JSON.parse(localStorage.getItem('emailjs_cfg')||'{}');
+  if(document.getElementById('ejService')){
+    document.getElementById('ejService').value=cfg.service||'';
+    document.getElementById('ejTemplate').value=cfg.template||'';
+    document.getElementById('ejPublic').value=cfg.publicKey||'';
+  }
+  if(cfg.publicKey && typeof emailjs!=='undefined'){
+    try{emailjs.init({publicKey:cfg.publicKey});}catch(e){}
+  }
+}
 
 function unlockWithBook(code,trans,method){
 // SECURE: Only unlocks specific code - en shows only en, af only af, bundle both
@@ -202,6 +264,16 @@ dl.classList.add('show');dl.scrollIntoView({behavior:'smooth'});
 }
 
 window.addEventListener('load',()=>{
+// Auto-unlock from ?book=xx&trans=yy (used by WhatsApp / email links)
+try{
+  const params=new URLSearchParams(location.search);
+  const book=params.get('book');
+  const trans=params.get('trans');
+  if(book && (book==='en'||book==='af'||book==='bundle') && trans){
+    setTimeout(()=>unlockWithBook(book,trans,'Customer link SECURE - book='+book+' trans='+trans),400);
+  }
+}catch(e){}
+loadEmailJSCfg();
 setTimeout(()=>{
 try{
 if(window.paypal){
@@ -230,7 +302,7 @@ onCancel:()=>{document.getElementById('paypalStatus').textContent='Cancelled Sec
 },700);
 });
 
-function openAdmin(){document.getElementById('adminPanel').classList.add('show');}
+function openAdmin(){document.getElementById('adminPanel').classList.add('show');loadEmailJSCfg();}
 function closeAdmin(){document.getElementById('adminPanel').classList.remove('show');}
 function checkPin(){if(document.getElementById('adminPin').value==='12021'){document.getElementById('adminLogin').style.display='none';document.getElementById('adminContent').style.display='block';document.getElementById('adminPin').value='';renderOrders();}else{alert('Wrong PIN Secure');}}
 function renderOrders(){
@@ -261,39 +333,67 @@ const em=document.getElementById('sendEmail').value,bk=document.getElementById('
 if(!em.includes('@')){alert('Enter customer email SECURE');return;}
 let bookName=bk==='en'?'English - Frostveil Kingdom SECURE REAL BOOK 0.7MB - Only English - Code: en - Cannot get Afrikaans - Secure 1=1':bk==='af'?'Afrikaans - Ysgordyn-Land SECURE REAL BOOK 1.7MB - Only Afrikaans - Code: af - Cannot get English - Secure 1=1':bk==='bundle'?'Bundle Both SECURE REAL BOOKS 0.7MB + 1.7MB - Both - Code: bundle - Secure Both':'Both Covers';
 updatePreview();
-document.getElementById('sendStatus').innerHTML='📤 Sending SECURE REAL BOOK via FormSubmit - 1 Book Paid = 1 Book Only - No upload needed...<br>To: '+em+'<br>From: queryallinone@yahoo.com<br>SECURE REAL BOOK: '+bookName+' (Code: '+bk+') - Only this book - Cannot get all<br>Which book SECURE: '+bookName+' - Only '+bk+'<br>Trans: '+tr+' - Locked to code '+bk+' - Secure 1=1 Only<br>REAL PDFs: Only '+bk+' download button - Other books hidden from DOM - Security fixed - Cannot download all if paid 1';
-sendBookBackup();
+const cfg=JSON.parse(localStorage.getItem('emailjs_cfg')||'{}');
+const hasEJ = cfg.service && cfg.template && cfg.publicKey;
+document.getElementById('sendStatus').innerHTML='📤 Sending SECURE REAL BOOK'+(hasEJ?' via EmailJS':' via FormSubmit (EmailJS not configured)')+' - 1 Book Paid = 1 Book Only<br>To: '+em+'<br>From: queryallinone@yahoo.com<br>SECURE REAL BOOK: '+bookName+' (Code: '+bk+') - Only this book - Cannot get all<br>Trans: '+tr+' - Locked to code '+bk;
+if(hasEJ){
+  try{
+    if(typeof emailjs!=='undefined'){emailjs.init({publicKey:cfg.publicKey});}
+    const downloadLink = location.origin + location.pathname + '?book='+bk+'&trans='+encodeURIComponent(tr)+'#download';
+    emailjs.send(cfg.service,cfg.template,{
+      to_email: em,
+      from_name: 'Charl Tomlinson - Mikyla Books',
+      reply_to: 'queryallinone@yahoo.com',
+      subject: 'Your Mikyla SECURE REAL BOOK - '+bookName+' - Code: '+bk,
+      message: msg,
+      book_name: bookName,
+      book_code: bk,
+      transaction_id: tr,
+      download_link: downloadLink,
+      customer_email: em
+    }).then(function(){
+      document.getElementById('sendStatus').innerHTML+='<br>✅ EmailJS sent SECURE to '+em+' - Only '+bk;
+      unlockWithBook(bk,tr,'Admin 12021 EmailJS SECURE REAL BOOK - 1=1 Only - Book: '+bookName+' Code: '+bk+' to '+em);
+    }).catch(function(err){
+      document.getElementById('sendStatus').innerHTML+='<br>⚠️ EmailJS failed: '+err+' - Falling back to FormSubmit';
+      sendBookBackup();
+    });
+  }catch(e){
+    document.getElementById('sendStatus').innerHTML+='<br>⚠️ EmailJS error: '+e+' - Falling back to FormSubmit';
+    sendBookBackup();
+  }
+}else{
+  sendBookBackup();
+}
 }
 
 function sendWhatsAppDirect(){
 const em=document.getElementById('sendEmail').value,bk=document.getElementById('sendBook').value,tr=document.getElementById('sendTransId').value;
-let customerPhone=prompt('Enter customer WhatsApp number 27XXXXXXXXX (without +):','27');
+let lastPhone = localStorage.getItem('mikyla_last_wa') || '27';
+let customerPhone = prompt('Enter customer WhatsApp number 27XXXXXXXXX (without +):', lastPhone);
 if(!customerPhone){return;}
+customerPhone = customerPhone.replace(/[^0-9]/g,'');
+if(customerPhone.length < 10){alert('Number too short. Example: 27821234567');return;}
+localStorage.setItem('mikyla_last_wa', customerPhone);
 let bookName=bk==='en'?'English - Frostveil Kingdom SECURE REAL BOOK - Only English Code: en - Cannot get Afrikaans - Secure 1=1 Only':bk==='af'?'Afrikaans - Ysgordyn-Land SECURE REAL BOOK - Only Afrikaans Code: af - Cannot get English - Secure 1=1 Only':bk==='bundle'?'Bundle Both SECURE REAL BOOKS - Both Code: bundle - Secure Both':'Both Covers';
 let message=`Hi! Thank you for buying ${bookName} SECURE REAL BOOK from Charl Tomlinson Cape Town!
-
 Your payment verified SECURE - 1 Book Paid = 1 Book Only
 Ref: ${tr}
 Code: ${bk} - Only this book unlocks - Cannot get all books (security fixed)
-
 You paid for: ${bookName}
 Only ${bk} download - Other books remain LOCKED - Secure
-
 Your SECURE download link (only paid book):
-https://mikyla.netlify.app/download-secure.html?book=${bk}&trans=${tr}
-
+https://mikyla.netlify.app/?book=${bk}&trans=${tr}#download
 Only ${bk} PDF - Cannot get other book - Secure 1=1 Only
-
 Enjoy with Chessie & Chloe!
-
 Charl
 queryallinone@yahoo.com
 0725162740
 Capitec 2557334258
 SECURE - 1 Book Paid = 1 Book Only - Code: ${bk}`;
-let waUrl=`https://wa.me/${customerPhone}&text=${encodeURIComponent(message)}`;
+let waUrl=`https://api.whatsapp.com/send?phone=${customerPhone}&text=${encodeURIComponent(message)}`;
 window.open(waUrl,'_blank');
-document.getElementById('sendStatus').innerHTML='💬 WhatsApp Direct SECURE REAL BOOK (Privacy Fixed) opened to '+customerPhone+'<br>SECURE REAL BOOK: '+bookName+' - Only '+bk+' - Code: '+bk+' - Only this book unlocks - Cannot get all - Secure 1=1 Only<br>URL: '+waUrl+'<br>Opens DIRECT chat to customer - Only '+bk+' - Secure';
+document.getElementById('sendStatus').innerHTML='💬 WhatsApp Direct SECURE REAL BOOK opened to '+customerPhone+'<br>SECURE REAL BOOK: '+bookName+' - Only '+bk+' - Code: '+bk+' - Only this book unlocks - Cannot get all - Secure 1=1 Only<br>URL: '+waUrl;
 unlockWithBook(bk,tr,'Admin 12021 WhatsApp Direct SECURE REAL BOOK - 1=1 Only - Book: '+bookName+' Code: '+bk+' to '+customerPhone);
 }
 
