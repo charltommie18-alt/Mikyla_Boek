@@ -124,7 +124,7 @@ SECURE - 1 Book Paid = 1 Book Only
 <button class="btn dark" style="font-size:8px;padding:4px 8px" onclick="downloadRealPdf('af')">📥 Download Afrikaans PDF (base64)</button>
 <button class="btn dark" style="font-size:8px;padding:4px 8px" onclick="downloadNewFullPdf()">📥 Download NEW Full Frostveil PDF (file)</button>
 </div>
-<p style="font-size:6px;color:#facc15;margin-top:3px">NEW PDF: Place <b>MIKYLA-Frostveil-Kingdom-FULL-BUNDLED-Book.pdf</b> next to index.html on Netlify/GitHub for the full quality English download.</p>
+<p style="font-size:6px;color:#facc15;margin-top:3px">NEW PDF: Place <b>Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf</b> next to index.html (full colour English book).</p>
 </div>
 
 <div style="margin-top:8px;background:#1e293b;border:1px solid #ffffff22;padding:6px;border-radius:8px">
@@ -196,7 +196,7 @@ function downloadRealCover(type){dlB64(type==='en'?enCoverB64.replace('data:imag
 function downloadRealPdf(type){dlB64(type==='en'?enPdfB64:afPdfB64,'Mikyla_'+(type==='en'?'English_46Pages_0.7MB_SECURE_ONLY_'+(cart[0]?.code||type):'Afrikaans_46Bladsye_1.7MB_SECURE_ONLY_'+(cart[0]?.code||type))+'_REAL_BOOK_Charl_Tomlinson_Cape_Town_SECURE.pdf','application/pdf');}
 function downloadNewFullPdf(){
   const a=document.createElement('a');
-  a.href='MIKYLA-Frostveil-Kingdom-FULL-BUNDLED-Book.pdf';
+  a.href='Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf';
   a.download='Mikyla_English_Frostveil_Kingdom_FULL_COLOUR_SECURE_Charl_Tomlinson.pdf';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
   document.getElementById('sendStatus') && (document.getElementById('sendStatus').innerHTML='📥 Trying NEW Full Frostveil PDF (make sure the PDF file is uploaded next to index.html on Netlify)');
@@ -383,7 +383,7 @@ Code: ${bk} - Only this book unlocks - Cannot get all books (security fixed)
 You paid for: ${bookName}
 Only ${bk} download - Other books remain LOCKED - Secure
 Your SECURE download link (only paid book):
-https://mikyla.netlify.app/?book=${bk}&trans=${tr}#download
+https://charltommie18-alt.github.io/Mikyla_Boek/download-secure.html?book=${bk}&trans=${tr}
 Only ${bk} PDF - Cannot get other book - Secure 1=1 Only
 Enjoy with Chessie & Chloe!
 Charl
