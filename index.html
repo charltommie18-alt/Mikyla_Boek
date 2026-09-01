@@ -130,9 +130,9 @@ SECURE - 1 Book Paid = 1 Book Only
 <div style="margin-top:8px;background:#1e293b;border:1px solid #ffffff22;padding:6px;border-radius:8px">
 <h4 style="font-size:9px">⚙️ EmailJS Auto-Reply Config (optional)</h4>
 <p style="font-size:6px;color:#94a3b8">If set, SEND uses EmailJS. If empty, falls back to FormSubmit. Your emails are already connected.</p>
-<input id="ejService" class="input" placeholder="EmailJS Service ID (e.g. service_xxxxx)" style="font-size:8px">
-<input id="ejTemplate" class="input" placeholder="EmailJS Template ID (e.g. template_xxxxx)" style="font-size:8px">
-<input id="ejPublic" class="input" placeholder="EmailJS Public Key" style="font-size:8px">
+<input id="ejService" class="input" placeholder="EmailJS Service ID" value="service_r58xvdz" style="font-size:8px">
+<input id="ejTemplate" class="input" placeholder="EmailJS Template ID" value="template_ys0xa7s" style="font-size:8px">
+<input id="ejPublic" class="input" placeholder="EmailJS Public Key" value="2lEmbRRtEMVwbX5SU" style="font-size:8px">
 <button class="btn gold" style="font-size:8px;margin-top:3px" onclick="saveEmailJSCfg()">💾 Save EmailJS Config</button>
 <div id="ejStatus" style="font-size:7px;margin-top:3px;color:#4ade80"></div>
 </div>
@@ -155,6 +155,11 @@ let flakes=[...Array(20)].map(()=>({x:Math.random()*canvas.width,y:Math.random()
 
 let cart=[];let orders=JSON.parse(localStorage.getItem('mikyla_orders_secure_v1')||'[]');
 let emailjsCfg=JSON.parse(localStorage.getItem('emailjs_cfg')||'{}');
+// Default EmailJS credentials (user provided)
+if(!emailjsCfg.publicKey) emailjsCfg.publicKey = '2lEmbRRtEMVwbX5SU';
+if(!emailjsCfg.template) emailjsCfg.template = 'template_ys0xa7s';
+if(!emailjsCfg.service) emailjsCfg.service = 'service_r58xvdz';
+
 
 function selectBook(t){
 document.querySelectorAll('#books .card').forEach(c=>c.classList.remove('selected'));
@@ -219,11 +224,15 @@ function saveEmailJSCfg(){
   }
 }
 function loadEmailJSCfg(){
-  const cfg=JSON.parse(localStorage.getItem('emailjs_cfg')||'{}');
+  let cfg=JSON.parse(localStorage.getItem('emailjs_cfg')||'{}');
+  // Always ensure user-provided defaults are present
+  if(!cfg.publicKey) cfg.publicKey = '2lEmbRRtEMVwbX5SU';
+  if(!cfg.template) cfg.template = 'template_ys0xa7s';
+  if(!cfg.service) cfg.service = 'service_r58xvdz';
   if(document.getElementById('ejService')){
-    document.getElementById('ejService').value=cfg.service||'';
-    document.getElementById('ejTemplate').value=cfg.template||'';
-    document.getElementById('ejPublic').value=cfg.publicKey||'';
+    document.getElementById('ejService').value=cfg.service||'service_r58xvdz';
+    document.getElementById('ejTemplate').value=cfg.template||'template_ys0xa7s';
+    document.getElementById('ejPublic').value=cfg.publicKey||'2lEmbRRtEMVwbX5SU';
   }
   if(cfg.publicKey && typeof emailjs!=='undefined'){
     try{emailjs.init({publicKey:cfg.publicKey});}catch(e){}
@@ -334,6 +343,9 @@ if(!em.includes('@')){alert('Enter customer email SECURE');return;}
 let bookName=bk==='en'?'English - Frostveil Kingdom SECURE REAL BOOK 0.7MB - Only English - Code: en - Cannot get Afrikaans - Secure 1=1':bk==='af'?'Afrikaans - Ysgordyn-Land SECURE REAL BOOK 1.7MB - Only Afrikaans - Code: af - Cannot get English - Secure 1=1':bk==='bundle'?'Bundle Both SECURE REAL BOOKS 0.7MB + 1.7MB - Both - Code: bundle - Secure Both':'Both Covers';
 updatePreview();
 const cfg=JSON.parse(localStorage.getItem('emailjs_cfg')||'{}');
+if(!cfg.publicKey) cfg.publicKey = '2lEmbRRtEMVwbX5SU';
+if(!cfg.template) cfg.template = 'template_ys0xa7s';
+if(!cfg.service) cfg.service = 'service_r58xvdz';
 const hasEJ = cfg.service && cfg.template && cfg.publicKey;
 document.getElementById('sendStatus').innerHTML='📤 Sending SECURE REAL BOOK'+(hasEJ?' via EmailJS':' via FormSubmit (EmailJS not configured)')+' - 1 Book Paid = 1 Book Only<br>To: '+em+'<br>From: queryallinone@yahoo.com<br>SECURE REAL BOOK: '+bookName+' (Code: '+bk+') - Only this book - Cannot get all<br>Trans: '+tr+' - Locked to code '+bk;
 if(hasEJ){
