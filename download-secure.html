@@ -3,97 +3,123 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Download your Mikyla book - Secure</title>
+<title>Download your Mikyla book</title>
 <style>
 body{margin:0;background:#0a0e2a;color:#eef;font-family:system-ui,sans-serif;padding:16px;text-align:center}
 .card{background:#ffffff12;border:2px solid #4ade80;border-radius:16px;padding:20px;max-width:520px;margin:16px auto}
-.btn{display:block;width:100%;box-sizing:border-box;margin:10px 0;padding:16px;border:none;border-radius:12px;font-weight:800;font-size:16px;cursor:pointer;text-decoration:none;color:#000;background:#4ade80}
-.gold{background:#facc15}
+.btn{display:block;width:100%;box-sizing:border-box;margin:10px 0;padding:16px;border:none;border-radius:12px;font-weight:800;font-size:16px;cursor:pointer;text-decoration:none;color:#000;background:#facc15}
 .input{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:none;margin:8px 0;font-size:15px}
 .locked{background:#ef444433;border:1px solid #ef4444;color:#fecaca;padding:12px;border-radius:10px;margin-top:12px;font-size:14px}
 .ok{background:#4ade8033;border:1px solid #4ade80;color:#bbf7d0;padding:12px;border-radius:10px;margin-top:12px;font-size:14px}
 .small{font-size:13px;color:#94a3b8}
-h1{font-size:22px;margin:8px 0}
-h2{font-size:18px;margin:8px 0;color:#facc15}
 .warn{background:#facc1533;border:1px solid #facc15;color:#fde68a;padding:10px;border-radius:10px;font-size:13px;margin:8px 0}
+#errorBox{display:none;background:#7f1d1d;border:2px solid #ef4444;color:#fecaca;padding:14px;border-radius:12px;margin:12px auto;max-width:520px;text-align:left;font-size:14px}
 #downloadBox{display:none}
 </style>
 </head>
 <body>
-<h1>📥 Your Mikyla Book Download</h1>
-<p class="small">Charl Tomlinson • charltommie18@gmail.com • 072 516 2740<br>1 Book Paid = 1 Book Only</p>
+<h1>📥 Your Mikyla Book</h1>
+<p class="small">charltommie18@gmail.com · 066 286 0184<br>1 Book Paid = 1 Book Only</p>
 
 <div id="verifyBox" class="card">
-  <h2>Unlock your paid book</h2>
+  <h2 style="color:#facc15">Unlock your book</h2>
   <p class="small">Enter the email and payment reference from your order.</p>
   <input id="verifyEmail" class="input" type="email" placeholder="Email used for payment">
-  <input id="verifyTrans" class="input" type="text" placeholder="Payment ref (e.g. Leanie en)">
+  <input id="verifyTrans" class="input" type="text" placeholder="Payment ref">
   <div id="bookLockInfo" class="warn" style="display:none"></div>
   <select id="verifyBook" class="input">
-    <option value="en">English colour book (en)</option>
-    <option value="af">Afrikaans book (af)</option>
-    <option value="bundle">Bundle both (bundle)</option>
+    <option value="en">English colour book</option>
+    <option value="af">Afrikaans book</option>
+    <option value="bundle">Bundle both</option>
   </select>
-  <button class="btn gold" onclick="verifyTransaction()">Unlock download</button>
+  <button class="btn" onclick="verifyTransaction()">Show download</button>
   <p id="verifyStatus" class="small" style="margin-top:10px;color:#facc15"></p>
 </div>
 
+<div id="errorBox"></div>
+
 <div id="downloadBox">
   <div class="card" id="enCard" style="display:none">
-    <h2>✅ English Colour Book</h2>
-    <p class="small">Ref: <b id="enTrans"></b> · <span id="enEmail"></span></p>
-    <a class="btn gold" href="Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf" download>📥 Download English COLOUR PDF</a>
-    <div class="locked">Afrikaans is locked — you paid for English only.</div>
+    <h2 style="color:#facc15">✅ English book ready</h2>
+    <p class="small">Ref: <b id="enTrans"></b></p>
+    <button class="btn" onclick="getBook('en')">📥 Download / Open English PDF</button>
+    <div class="locked">Afrikaans locked — English only.</div>
   </div>
   <div class="card" id="afCard" style="display:none">
-    <h2>✅ Afrikaans Book</h2>
-    <p class="small">Ref: <b id="afTrans"></b> · <span id="afEmail"></span></p>
-    <a class="btn gold" href="Mikyla_Afrikaans_REAL_BOOK_46Bladsye_1.7MB.pdf" download>📥 Download Afrikaans PDF</a>
-    <div class="locked">English is locked — you paid for Afrikaans only.</div>
+    <h2 style="color:#facc15">✅ Afrikaans book ready</h2>
+    <p class="small">Ref: <b id="afTrans"></b></p>
+    <button class="btn" onclick="getBook('af')">📥 Download / Open Afrikaans PDF</button>
+    <div class="locked">English locked — Afrikaans only.</div>
   </div>
   <div class="card" id="bundleCard" style="display:none">
-    <h2>✅ Bundle — Both books</h2>
-    <p class="small">Ref: <b id="bundleTrans"></b> · <span id="bundleEmail"></span></p>
-    <a class="btn gold" href="Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf" download>📥 Download English COLOUR PDF</a>
-    <a class="btn gold" href="Mikyla_Afrikaans_REAL_BOOK_46Bladsye_1.7MB.pdf" download>📥 Download Afrikaans PDF</a>
-    <div class="ok">Bundle unlocked — both books available.</div>
+    <h2 style="color:#facc15">✅ Bundle ready</h2>
+    <button class="btn" onclick="getBook('en')">📥 English PDF</button>
+    <button class="btn" onclick="getBook('af')">📥 Afrikaans PDF</button>
+    <div class="ok">Both books unlocked.</div>
   </div>
 </div>
 
-<p class="small" style="margin-top:24px">Need help? WhatsApp 072 516 2740 · charltommie18@gmail.com</p>
-
 <script>
 let LOCKED_BOOK=null, LOCKED_TRANS=null;
-function showOnly(code,trans,email){
+
+const EN_FILES=[
+  'Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf',
+  'mikyla regte english boek-WA0027-1.pdf'
+];
+const AF_FILES=[
+  'Mikyla_Afrikaans_REAL_BOOK_46Bladsye_1.7MB.pdf'
+];
+
+function showErr(msg){
+  const b=document.getElementById('errorBox');
+  b.style.display='block';
+  b.innerHTML=msg;
+}
+
+async function getBook(kind){
+  const list = kind==='af' ? AF_FILES : EN_FILES;
+  for(const f of list){
+    try{
+      const r=await fetch(f,{method:'HEAD'});
+      if(r.ok){
+        // Direct navigation works better than <a download> on mobile
+        window.location.href=f;
+        return;
+      }
+    }catch(e){}
+  }
+  showErr('<b>PDF file not found on the website.</b><br><br>Charl must upload this file to GitHub next to index.html:<br><code>Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf</code><br><br>WhatsApp 066 286 0184 · charltommie18@gmail.com');
+}
+
+function showOnly(code,trans){
   document.getElementById('verifyBox').style.display='none';
   document.getElementById('downloadBox').style.display='block';
-  ['enCard','afCard','bundleCard'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('enCard').style.display='none';
+  document.getElementById('afCard').style.display='none';
+  document.getElementById('bundleCard').style.display='none';
   if(code==='en'){
     document.getElementById('enCard').style.display='block';
     document.getElementById('enTrans').textContent=trans;
-    document.getElementById('enEmail').textContent=email;
   } else if(code==='af'){
     document.getElementById('afCard').style.display='block';
     document.getElementById('afTrans').textContent=trans;
-    document.getElementById('afEmail').textContent=email;
   } else {
     document.getElementById('bundleCard').style.display='block';
-    document.getElementById('bundleTrans').textContent=trans;
-    document.getElementById('bundleEmail').textContent=email;
   }
 }
+
 function verifyTransaction(){
   const email=document.getElementById('verifyEmail').value.trim().toLowerCase();
   const trans=document.getElementById('verifyTrans').value.trim();
   let book=document.getElementById('verifyBook').value;
   const status=document.getElementById('verifyStatus');
   if(!email.includes('@')){status.textContent='Enter a valid email';return;}
-  if(trans.length<2){status.textContent='Enter your payment reference';return;}
-  if(LOCKED_BOOK){book=LOCKED_BOOK;document.getElementById('verifyBook').value=LOCKED_BOOK;}
-  const useTrans=LOCKED_TRANS||trans;
-  status.textContent='✅ Unlocked: '+book;
-  showOnly(book,useTrans,email);
+  if(trans.length<2){status.textContent='Enter payment reference';return;}
+  if(LOCKED_BOOK) book=LOCKED_BOOK;
+  status.textContent='✅ Ready — tap Download below';
+  showOnly(book, LOCKED_TRANS||trans);
 }
+
 window.addEventListener('load',function(){
   const p=new URLSearchParams(location.search);
   const book=(p.get('book')||'').toLowerCase();
@@ -103,13 +129,12 @@ window.addEventListener('load',function(){
     LOCKED_BOOK=book;
     document.getElementById('verifyBook').value=book;
     document.getElementById('verifyBook').disabled=true;
-    const names={en:'English only',af:'Afrikaans only',bundle:'Bundle (both)'};
     document.getElementById('bookLockInfo').style.display='block';
-    document.getElementById('bookLockInfo').textContent='This link is for: '+names[book]+' only.';
+    document.getElementById('bookLockInfo').textContent='This link is locked to: '+book;
   }
   if(trans){LOCKED_TRANS=trans;document.getElementById('verifyTrans').value=trans;}
   if(email)document.getElementById('verifyEmail').value=email;
-  if(LOCKED_BOOK&&LOCKED_TRANS&&email){setTimeout(verifyTransaction,200);}
+  if(LOCKED_BOOK&&LOCKED_TRANS&&email) setTimeout(verifyTransaction,150);
 });
 </script>
 </body>
