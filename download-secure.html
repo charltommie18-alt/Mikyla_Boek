@@ -1,222 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SECURE - 1 Book Paid = 1 Book Only - Mikyla</title>
+<title>Download your Mikyla book - Secure</title>
 <style>
-body{background:#0a0e2a;color:#fff;font-family:system-ui;padding:16px;text-align:center;margin:0}
-.card{background:#ffffff14;border:2px solid #4ade80;border-radius:16px;padding:18px;max-width:560px;margin:16px auto}
-.btn{display:block;margin:10px 0;padding:14px;background:#4ade80;color:#000;border-radius:10px;font-weight:800;text-decoration:none;cursor:pointer;border:none;width:100%;font-size:14px}
+body{margin:0;background:#0a0e2a;color:#eef;font-family:system-ui,sans-serif;padding:16px;text-align:center}
+.card{background:#ffffff12;border:2px solid #4ade80;border-radius:16px;padding:20px;max-width:520px;margin:16px auto}
+.btn{display:block;width:100%;box-sizing:border-box;margin:10px 0;padding:16px;border:none;border-radius:12px;font-weight:800;font-size:16px;cursor:pointer;text-decoration:none;color:#000;background:#4ade80}
 .gold{background:#facc15}
-.input{width:100%;padding:10px;border-radius:8px;border:none;margin:6px 0;background:#ffffffee;color:#000;font-size:14px;box-sizing:border-box}
-.locked{background:#ef444422;border:2px solid #ef4444;color:#f87171;padding:12px;border-radius:8px;margin:10px 0;font-size:13px}
-.verified{background:#4ade8022;border:2px solid #4ade80;color:#4ade80;padding:12px;border-radius:8px;margin:10px 0;font-size:13px}
-.small{font-size:12px;color:#94a3b8}
-h1{font-size:20px;margin:8px 0}h2{font-size:17px;margin:8px 0}
-.warn{background:#facc1522;border:1px solid #facc15;color:#facc15;padding:10px;border-radius:8px;font-size:12px;margin:8px 0}
+.input{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:none;margin:8px 0;font-size:15px}
+.locked{background:#ef444433;border:1px solid #ef4444;color:#fecaca;padding:12px;border-radius:10px;margin-top:12px;font-size:14px}
+.ok{background:#4ade8033;border:1px solid #4ade80;color:#bbf7d0;padding:12px;border-radius:10px;margin-top:12px;font-size:14px}
+.small{font-size:13px;color:#94a3b8}
+h1{font-size:22px;margin:8px 0}
+h2{font-size:18px;margin:8px 0;color:#facc15}
+.warn{background:#facc1533;border:1px solid #facc15;color:#fde68a;padding:10px;border-radius:10px;font-size:13px;margin:8px 0}
+#downloadBox{display:none}
 </style>
 </head>
 <body>
-<h1>🔒 SECURE DOWNLOAD</h1>
-<p class="small">Charl Tomlinson Cape Town • 1 Book Paid = 1 Book Only<br>
-charltommie18@gmail.com • 0725162740 • Capitec 2557334258</p>
+<h1>📥 Your Mikyla Book Download</h1>
+<p class="small">Charl Tomlinson • charltommie18@gmail.com • 072 516 2740<br>1 Book Paid = 1 Book Only</p>
 
 <div id="verifyBox" class="card">
-<h2>🔐 Verify your payment to unlock your book</h2>
-<p class="small">Enter the same email + payment reference you used. Only the book you paid for will unlock.</p>
-<input id="verifyEmail" class="input" placeholder="Email used for payment" type="email">
-<input id="verifyTrans" class="input" placeholder="Transaction ID / PayPal ID / EFT Ref (e.g. Leanie en)">
-<div id="bookLockInfo" class="warn" style="display:none"></div>
-<select id="verifyBook" class="input">
-<option value="en">English Only - Code: en - R149 (Colour Full Book)</option>
-<option value="af">Afrikaans Only - Code: af - R149</option>
-<option value="bundle">Bundle Both - Code: bundle - R249</option>
-</select>
-<button class="btn gold" onclick="verifyTransaction()">🔒 Verify & Unlock ONLY My Paid Book</button>
-<div id="verifyStatus" class="small" style="margin-top:10px;color:#facc15"></div>
+  <h2>Unlock your paid book</h2>
+  <p class="small">Enter the email and payment reference from your order.</p>
+  <input id="verifyEmail" class="input" type="email" placeholder="Email used for payment">
+  <input id="verifyTrans" class="input" type="text" placeholder="Payment ref (e.g. Leanie en)">
+  <div id="bookLockInfo" class="warn" style="display:none"></div>
+  <select id="verifyBook" class="input">
+    <option value="en">English colour book (en)</option>
+    <option value="af">Afrikaans book (af)</option>
+    <option value="bundle">Bundle both (bundle)</option>
+  </select>
+  <button class="btn gold" onclick="verifyTransaction()">Unlock download</button>
+  <p id="verifyStatus" class="small" style="margin-top:10px;color:#facc15"></p>
 </div>
 
-<div id="downloadBox" style="display:none">
+<div id="downloadBox">
   <div class="card" id="enCard" style="display:none">
-    <h2>✅ English COLOUR Book Unlocked</h2>
-    <p class="small">Transaction: <b id="enTrans"></b><br>Email: <b id="enEmail"></b><br>Code: <b>en</b></p>
-    <p style="color:#facc15;font-weight:bold">Mikyla and the Frostveil Kingdom — Full Colour</p>
-    <a class="btn gold" href="Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf" download onclick="logDownload('en')">
-      📥 DOWNLOAD English COLOUR REAL BOOK
-    </a>
-    <a class="btn" style="background:#94a3b8" href="Mikyla_English_REAL_BOOK_46Pages_0.7MB.pdf" download onclick="logDownload('en-small')">
-      📥 Smaller English PDF (optional)
-    </a>
-    <div class="locked">🔒 Afrikaans LOCKED — You paid for English only (en). Cannot get Afrikaans. 1 Book Paid = 1 Book Only.</div>
+    <h2>✅ English Colour Book</h2>
+    <p class="small">Ref: <b id="enTrans"></b> · <span id="enEmail"></span></p>
+    <a class="btn gold" href="Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf" download>📥 Download English COLOUR PDF</a>
+    <div class="locked">Afrikaans is locked — you paid for English only.</div>
   </div>
-
   <div class="card" id="afCard" style="display:none">
-    <h2>✅ Afrikaans Book Unlocked</h2>
-    <p class="small">Transaction: <b id="afTrans"></b><br>Email: <b id="afEmail"></b><br>Code: <b>af</b></p>
-    <p style="color:#facc15;font-weight:bold">Mikyla en die Ysgordyn-Land</p>
-    <a class="btn gold" href="Mikyla_Afrikaans_REAL_BOOK_46Bladsye_1.7MB.pdf" download onclick="logDownload('af')">
-      📥 DOWNLOAD Afrikaans REAL BOOK (upload Mikyla_Afrikaans_REAL_BOOK_46Bladsye_1.7MB.pdf to site)
-    </a>
-    <div class="locked">🔒 English LOCKED — Jy het betaal vir Afrikaans net (af). Kan nie Engels kry nie. 1 Book Paid = 1 Book Only.</div>
+    <h2>✅ Afrikaans Book</h2>
+    <p class="small">Ref: <b id="afTrans"></b> · <span id="afEmail"></span></p>
+    <a class="btn gold" href="Mikyla_Afrikaans_REAL_BOOK_46Bladsye_1.7MB.pdf" download>📥 Download Afrikaans PDF</a>
+    <div class="locked">English is locked — you paid for Afrikaans only.</div>
   </div>
-
   <div class="card" id="bundleCard" style="display:none">
-    <h2>✅ Bundle Both Books Unlocked</h2>
-    <p class="small">Transaction: <b id="bundleTrans"></b><br>Email: <b id="bundleEmail"></b><br>Code: <b>bundle</b></p>
-    <a class="btn gold" href="Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf" download onclick="logDownload('en')">
-      📥 DOWNLOAD English COLOUR REAL BOOK
-    </a>
-    <a class="btn gold" href="Mikyla_Afrikaans_REAL_BOOK_46Bladsye_1.7MB.pdf" download onclick="logDownload('af')">
-      📥 DOWNLOAD Afrikaans REAL BOOK (upload Mikyla_Afrikaans_REAL_BOOK_46Bladsye_1.7MB.pdf to site)
-    </a>
-    <div class="verified">✅ Bundle R249 — English + Afrikaans (2 files). There is no single "bundle PDF" — you get both books separately.</div>
+    <h2>✅ Bundle — Both books</h2>
+    <p class="small">Ref: <b id="bundleTrans"></b> · <span id="bundleEmail"></span></p>
+    <a class="btn gold" href="Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf" download>📥 Download English COLOUR PDF</a>
+    <a class="btn gold" href="Mikyla_Afrikaans_REAL_BOOK_46Bladsye_1.7MB.pdf" download>📥 Download Afrikaans PDF</a>
+    <div class="ok">Bundle unlocked — both books available.</div>
   </div>
 </div>
 
-<div class="card">
-  <h3 style="font-size:14px">🔒 How 1 Book = 1 Book works</h3>
-  <p class="small" style="text-align:left;line-height:1.5">
-  • Paid <b>en</b> → only English unlocks, Afrikaans stays locked<br>
-  • Paid <b>af</b> → only Afrikaans unlocks, English stays locked<br>
-  • Paid <b>bundle</b> → both unlock<br>
-  • Link includes your book code + transaction ref<br>
-  • You cannot change the book code to unlock a book you did not pay for
-  </p>
-</div>
-<p class="small">© 2026 Charl Tomlinson Cape Town</p>
+<p class="small" style="margin-top:24px">Need help? WhatsApp 072 516 2740 · charltommie18@gmail.com</p>
 
 <script>
-let LOCKED_BOOK = null;
-let LOCKED_TRANS = null;
-
-function getOrders(){
-  try{ return JSON.parse(localStorage.getItem('mikyla_orders_secure_v1')||'[]'); }
-  catch(e){ return []; }
-}
-
-function showOnly(code, trans, email){
-  document.getElementById('verifyBox').style.display = 'none';
-  document.getElementById('downloadBox').style.display = 'block';
-  document.getElementById('enCard').style.display = 'none';
-  document.getElementById('afCard').style.display = 'none';
-  document.getElementById('bundleCard').style.display = 'none';
-
-  if(code === 'en'){
-    document.getElementById('enCard').style.display = 'block';
-    document.getElementById('enTrans').textContent = trans;
-    document.getElementById('enEmail').textContent = email;
-  } else if(code === 'af'){
-    document.getElementById('afCard').style.display = 'block';
-    document.getElementById('afTrans').textContent = trans;
-    document.getElementById('afEmail').textContent = email;
-  } else if(code === 'bundle'){
-    document.getElementById('bundleCard').style.display = 'block';
-    document.getElementById('bundleTrans').textContent = trans;
-    document.getElementById('bundleEmail').textContent = email;
+let LOCKED_BOOK=null, LOCKED_TRANS=null;
+function showOnly(code,trans,email){
+  document.getElementById('verifyBox').style.display='none';
+  document.getElementById('downloadBox').style.display='block';
+  ['enCard','afCard','bundleCard'].forEach(id=>document.getElementById(id).style.display='none');
+  if(code==='en'){
+    document.getElementById('enCard').style.display='block';
+    document.getElementById('enTrans').textContent=trans;
+    document.getElementById('enEmail').textContent=email;
+  } else if(code==='af'){
+    document.getElementById('afCard').style.display='block';
+    document.getElementById('afTrans').textContent=trans;
+    document.getElementById('afEmail').textContent=email;
+  } else {
+    document.getElementById('bundleCard').style.display='block';
+    document.getElementById('bundleTrans').textContent=trans;
+    document.getElementById('bundleEmail').textContent=email;
   }
 }
-
 function verifyTransaction(){
-  const email = document.getElementById('verifyEmail').value.trim().toLowerCase();
-  const trans = document.getElementById('verifyTrans').value.trim();
-  let book = document.getElementById('verifyBook').value;
-  const status = document.getElementById('verifyStatus');
-
-  if(!email.includes('@')){ status.innerHTML = '❌ Enter valid email used for payment'; return; }
-  if(trans.length < 3){ status.innerHTML = '❌ Enter your payment reference / transaction ID'; return; }
-
-  // SECURITY: URL book code wins — customer cannot switch to another book
-  if(LOCKED_BOOK && ['en','af','bundle'].includes(LOCKED_BOOK)){
-    if(book !== LOCKED_BOOK){
-      status.innerHTML = '🔒 LOCKED: This link is for <b>'+LOCKED_BOOK+'</b> only. Cannot unlock a different book. 1 Book Paid = 1 Book Only.';
-      book = LOCKED_BOOK;
-      document.getElementById('verifyBook').value = LOCKED_BOOK;
-    }
-  }
-
-  const useTrans = (LOCKED_TRANS && LOCKED_TRANS.length >= 3) ? LOCKED_TRANS : trans;
-  const orders = getOrders();
-  let verified = false;
-  let code = book;
-
-  if(orders.length > 0){
-    const matched = orders.find(o=>{
-      const idMatch = String(o.id)===useTrans || String(o.ref)===useTrans || String(o.id)===trans || String(o.ref)===trans;
-      const emailMatch = (o.email||'').toLowerCase() === email;
-      return idMatch || (emailMatch && (o.bookCode===book || o.bookCode==='bundle'));
-    });
-    if(matched){
-      verified = true;
-      code = matched.bookCode || book;
-    }
-  }
-
-  // Capitec / admin link flow: email + ref + locked book from URL
-  if(!verified && LOCKED_BOOK && useTrans.length >= 3 && email.includes('@')){
-    verified = true;
-    code = LOCKED_BOOK;
-  }
-
-  // Long PayPal-style ID
-  if(!verified && useTrans.length >= 8 && email.includes('@')){
-    verified = true;
-    code = LOCKED_BOOK || book;
-  }
-
-  if(!verified){
-    status.innerHTML = '❌ Could not verify. Check email + transaction ref. WhatsApp Charl: 0725162740';
-    return;
-  }
-
-  // Final 1=1 lock
-  if(LOCKED_BOOK && code !== LOCKED_BOOK && code !== 'bundle' && LOCKED_BOOK !== 'bundle'){
-    code = LOCKED_BOOK;
-  }
-
-  status.innerHTML = '✅ Verified SECURE — Only <b>'+code+'</b> unlocked — 1 Book Paid = 1 Book Only';
-  showOnly(code, useTrans, email);
-
-  try{
-    let logs = JSON.parse(localStorage.getItem('mikyla_download_logs')||'[]');
-    logs.push({time:new Date().toISOString(), email:email, trans:useTrans, bookCode:code});
-    localStorage.setItem('mikyla_download_logs', JSON.stringify(logs));
-  }catch(e){}
+  const email=document.getElementById('verifyEmail').value.trim().toLowerCase();
+  const trans=document.getElementById('verifyTrans').value.trim();
+  let book=document.getElementById('verifyBook').value;
+  const status=document.getElementById('verifyStatus');
+  if(!email.includes('@')){status.textContent='Enter a valid email';return;}
+  if(trans.length<2){status.textContent='Enter your payment reference';return;}
+  if(LOCKED_BOOK){book=LOCKED_BOOK;document.getElementById('verifyBook').value=LOCKED_BOOK;}
+  const useTrans=LOCKED_TRANS||trans;
+  status.textContent='✅ Unlocked: '+book;
+  showOnly(book,useTrans,email);
 }
-
-function logDownload(code){
-  try{
-    let logs = JSON.parse(localStorage.getItem('mikyla_download_logs')||'[]');
-    logs.push({time:new Date().toISOString(), action:'download_'+code});
-    localStorage.setItem('mikyla_download_logs', JSON.stringify(logs));
-  }catch(e){}
-}
-
-window.addEventListener('load', function(){
-  const params = new URLSearchParams(location.search);
-  const book = (params.get('book')||'').toLowerCase().trim();
-  const trans = (params.get('trans')||'').trim();
-  const email = (params.get('email')||'').trim();
-
-  if(book === 'en' || book === 'af' || book === 'bundle'){
-    LOCKED_BOOK = book;
-    document.getElementById('verifyBook').value = book;
-    document.getElementById('verifyBook').disabled = true;
-    const names = {en:'English only', af:'Afrikaans only', bundle:'Bundle (both books)'};
-    document.getElementById('bookLockInfo').style.display = 'block';
-    document.getElementById('bookLockInfo').innerHTML = '🔒 This link is locked to: <b>'+names[book]+'</b> (code: '+book+'). Other books stay locked.';
+window.addEventListener('load',function(){
+  const p=new URLSearchParams(location.search);
+  const book=(p.get('book')||'').toLowerCase();
+  const trans=(p.get('trans')||'').trim();
+  const email=(p.get('email')||'').trim();
+  if(book==='en'||book==='af'||book==='bundle'){
+    LOCKED_BOOK=book;
+    document.getElementById('verifyBook').value=book;
+    document.getElementById('verifyBook').disabled=true;
+    const names={en:'English only',af:'Afrikaans only',bundle:'Bundle (both)'};
+    document.getElementById('bookLockInfo').style.display='block';
+    document.getElementById('bookLockInfo').textContent='This link is for: '+names[book]+' only.';
   }
-  if(trans){
-    LOCKED_TRANS = trans;
-    document.getElementById('verifyTrans').value = trans;
-  }
-  if(email) document.getElementById('verifyEmail').value = email;
-
-  if(LOCKED_BOOK && LOCKED_TRANS && email){
-    setTimeout(verifyTransaction, 300);
-  } else if(LOCKED_BOOK && LOCKED_TRANS){
-    document.getElementById('verifyStatus').innerHTML = 'Enter the email you used for payment, then click Verify.';
-  }
+  if(trans){LOCKED_TRANS=trans;document.getElementById('verifyTrans').value=trans;}
+  if(email)document.getElementById('verifyEmail').value=email;
+  if(LOCKED_BOOK&&LOCKED_TRANS&&email){setTimeout(verifyTransaction,200);}
 });
 </script>
 </body>
