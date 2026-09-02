@@ -231,12 +231,25 @@ function dlB64(b64, name, mime){
 }
 function downloadRealCover(type){dlB64(type==='en'?enCoverB64.replace('data:image/jpeg;base64,',''):afCoverB64.replace('data:image/jpeg;base64,',''),'Mikyla_'+(type==='en'?'English':'Afrikaans')+'_Cover_REAL_Charl_Tomlinson.jpg','image/jpeg');}
 function downloadRealPdf(type){
-  // Always use embedded PDFs - works without extra files on server
   if(type==='en'){
-    dlB64(enPdfB64,'Mikyla_English_Frostveil_Kingdom_SECURE_Charl_Tomlinson.pdf','application/pdf');
-  } else {
-    dlB64(afPdfB64,'Mikyla_Afrikaans_Ysgordyn_Land_SECURE_Charl_Tomlinson.pdf','application/pdf');
+    // Full COLOUR English book file (upload this PDF next to index.html on GitHub)
+    const colourFile='Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf';
+    fetch(colourFile,{method:'HEAD'}).then(function(r){
+      if(r.ok){
+        const a=document.createElement('a');
+        a.href=colourFile;
+        a.download='Mikyla_English_COLOUR_Frostveil_Kingdom_SECURE.pdf';
+        document.body.appendChild(a);a.click();document.body.removeChild(a);
+      } else {
+        // fallback embedded (lower quality)
+        dlB64(enPdfB64,'Mikyla_English_Frostveil_Kingdom_SECURE.pdf','application/pdf');
+      }
+    }).catch(function(){
+      dlB64(enPdfB64,'Mikyla_English_Frostveil_Kingdom_SECURE.pdf','application/pdf');
+    });
+    return;
   }
+  dlB64(afPdfB64,'Mikyla_Afrikaans_Ysgordyn_Land_SECURE_Charl_Tomlinson.pdf','application/pdf');
 }
 
 function downloadNewFullPdf(){
@@ -290,7 +303,7 @@ if(code==='bundle')bookName='Bundle: English COLOUR + Afrikaans (2 separate down
 
 // SECURE LOGIC: Show ONLY paid book
 if(code==='en'){
-h+='<div class="dlLink" onclick="downloadRealPdf(\'en\')" style="background:#facc15">📥 English COLOUR REAL BOOK PDF SECURE - Only English - Code: en - '+trans+' - Cannot get Afrikaans - SECURE 1=1 Only</div>';
+h+='<div class="dlLink" onclick="downloadRealPdf(\'en\')" style="background:#facc15">📥 English FULL COLOUR BOOK PDF - Only English - Code: en - '+trans+' - Cannot get Afrikaans - SECURE 1=1 Only</div>';
 h+='<div style="background:#ef444422;border:1px solid #ef444455;padding:6px;border-radius:6px;margin:5px 0;font-size:8px;color:#f87171">🔒 SECURE: You paid for English (Code: en) - Only English unlocks - Afrikaans remains LOCKED - Cannot download all books - Security fixed</div>';
 }
 if(code==='af'){
