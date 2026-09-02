@@ -193,8 +193,11 @@ document.getElementById('popFile').addEventListener('change',checkCapitec);
 function submitCapitec(){
 const e=document.getElementById('capitecEmail').value,r=document.getElementById('capitecRef').value;
 const fn=document.getElementById('popFile').files[0]?.name||'POP';
-const bookInfo=cart[0]?cart[0].n+' ('+cart[0].code+') SECURE - Only this book':'No book selected SECURE';
-const order={id:Date.now(),email:e,ref:r,file:fn,book:bookInfo,bookCode:cart[0]?.code||'unknown',short:cart[0]?.short||'Unknown SECURE',total:cart[0]?.p||149,type:'Capitec EFT SECURE - 1 Book = 1 Book Only - Code: '+(cart[0]?.code||''),time:new Date().toLocaleString(),status:'Pending SECURE - Only '+ (cart[0]?.code||'') +' unlocks - Cannot get all books - Code: '+(cart[0]?.code||'')};
+if(!cart.length || !cart[0]?.code){alert('Please SELECT a book first (English / Afrikaans / Bundle) before submitting payment.');return;}
+if(!e.includes('@')){alert('Enter a valid email');return;}
+if(r.length<2){alert('Enter payment reference');return;}
+const bookInfo=cart[0].n+' ('+cart[0].code+') SECURE - Only this book';
+const order={id:Date.now(),email:e,ref:r,file:fn,book:bookInfo,bookCode:cart[0].code,short:cart[0].short,total:cart[0].p||149,type:'Capitec EFT SECURE - 1 Book = 1 Book Only - Code: '+cart[0].code,time:new Date().toLocaleString(),status:'Pending SECURE - Only '+cart[0].code+' unlocks - Cannot get all books - Code: '+cart[0].code};
 orders.push(order);localStorage.setItem('mikyla_orders_secure_v1',JSON.stringify(orders));
 document.getElementById('capitecStatus').innerHTML='⏳ Submitted SECURE #'+order.id+'<br>SECURE REAL BOOK: <b>'+bookInfo+'</b><br>Code: '+(cart[0]?.code||'')+' - Only this book unlocks<br>Email: '+e+'<br>Ref: '+r+'<br>Status: PENDING verification by Charl';
 renderOrders();
@@ -373,7 +376,7 @@ list.innerHTML=orders.slice().reverse().map(o=>`<div class="order"><b>#${o.id}</
 function verifyOrder(id){
 const o=orders.find(x=>x.id==id);if(!o)return;
 document.getElementById('sendEmail').value=o.email;document.getElementById('sendBook').value=o.bookCode||'bundle';document.getElementById('sendTransId').value=o.ref||o.id;
-const dl='https://mikyla.netlify.app/download-secure.html?book='+(o.bookCode||'en')+'&trans='+encodeURIComponent(o.ref||o.id)+'&email='+encodeURIComponent(o.email);
+const dl='https://charltommie18-alt.github.io/Mikyla_Boek/download-secure.html?book='+(o.bookCode||'en')+'&trans='+encodeURIComponent(o.ref||o.id)+'&email='+encodeURIComponent(o.email);
 document.getElementById('sendMessage').value='Hi!\n\nThank you for buying '+o.book+' SECURE REAL BOOK from Charl Tomlinson Cape Town!\n\nYour payment verified SECURE - 1 Book Paid = 1 Book Only\nRef: '+(o.ref||o.id)+'\nCode: '+(o.bookCode||'')+' - Only this book unlocks - Cannot get all books\n\nYou paid for: '+o.book+'\n\nYour SECURE download link (only paid book):\n'+dl+'\n\nOnly '+(o.bookCode||'')+' PDF - Cannot get other book - Secure 1=1 Only\n\nEnjoy with Chessie & Chloe!\n\nCharl\ncharltommie18@gmail.com\n0725162740\nCapitec 2557334258\nSECURE - 1 Book Paid = 1 Book Only - Code: '+(o.bookCode||'');
 o.status='Verified SECURE REAL BOOK Sent '+o.book+' Code: '+(o.bookCode||'')+' to '+o.email+' - 1=1 Only - Secure';localStorage.setItem('mikyla_orders_secure_v1',JSON.stringify(orders));renderOrders();updatePreview();
 }
@@ -403,7 +406,7 @@ document.getElementById('sendStatus').innerHTML='📤 Sending SECURE REAL BOOK'+
 if(hasEJ){
   try{
     if(typeof emailjs!=='undefined'){emailjs.init({publicKey:cfg.publicKey});}
-    const downloadLink = (location.hostname.includes('netlify') ? 'https://mikyla.netlify.app' : (location.origin + location.pathname.replace(/index\.html$/i,'').replace(/\/$/,''))) + '/download-secure.html?book='+bk+'&trans='+encodeURIComponent(tr)+'&email='+encodeURIComponent(em);
+    const downloadLink = 'https://charltommie18-alt.github.io/Mikyla_Boek/download-secure.html?book='+bk+'&trans='+encodeURIComponent(tr)+'&email='+encodeURIComponent(em);
     emailjs.send(cfg.service,cfg.template,{
       to_email: em,
       email: em,
@@ -457,7 +460,7 @@ Code: ${bk} - Only this book unlocks - Cannot get all books (security fixed)
 You paid for: ${bookName}
 Only ${bk} download - Other books remain LOCKED - Secure
 Your SECURE download link (only paid book):
-https://mikyla.netlify.app/download-secure.html?book=${bk}&trans=${tr}
+https://charltommie18-alt.github.io/Mikyla_Boek/download-secure.html?book=${bk}&trans=${tr}
 Only ${bk} PDF - Cannot get other book - Secure 1=1 Only
 Enjoy with Chessie & Chloe!
 Charl
