@@ -37,7 +37,7 @@
 .secureNote{background:#ef444422;border:1px solid #ef444455;padding:6px;border-radius:6px;margin:5px 0;font-size:8px;color:#f87171}
 </style></head><body>
 <canvas id="snow"></canvas>
-<a class="wa" href="https://wa.me/27662860184?text=Hi%20Charl%2C%20I%20want%20to%20buy%20Mikyla%20REAL%20BOOK%20-%20Cape%20Town" target="_blank" rel="noopener" onclick="window.location.href=this.href;return true;">💬</a>
+
 <div class="adminBtn" onclick="openAdmin()">⚙️ ADMIN</div>
 <div class="header"><div class="logo">M • CHARL TOMLINSON • SECURE - 1 BOOK PAID = 1 BOOK ONLY</div><div style="display:flex;gap:4px"><a href="tel:+27662860184" style="color:#fff;text-decoration:none;background:#ffffff14;padding:3px 6px;border-radius:8px;font-size:8px">066 286 0184</a><a href="mailto:queryallinone@yahoo.com" style="color:#facc15;font-size:8px;text-decoration:none">queryallinone@yahoo.com</a></div></div>
 
@@ -213,24 +213,14 @@ function dlB64(b64, name, mime){
 }
 function downloadRealCover(type){dlB64(type==='en'?enCoverB64.replace('data:image/jpeg;base64,',''):afCoverB64.replace('data:image/jpeg;base64,',''),'Mikyla_'+(type==='en'?'English':'Afrikaans')+'_Cover_REAL_Charl_Tomlinson.jpg','image/jpeg');}
 function downloadRealPdf(type){
+  // Always use embedded PDFs - works without extra files on server
   if(type==='en'){
-    // Try colour PDF file on server first, else embedded base64 (always works)
-    fetch('Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf',{method:'HEAD'}).then(r=>{
-      if(r.ok){
-        const a=document.createElement('a');
-        a.href='Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf';
-        a.download='Mikyla_English_COLOUR_Frostveil_Kingdom_SECURE.pdf';
-        document.body.appendChild(a);a.click();document.body.removeChild(a);
-      } else {
-        dlB64(enPdfB64,'Mikyla_English_Frostveil_Kingdom_SECURE.pdf','application/pdf');
-      }
-    }).catch(()=>{
-      dlB64(enPdfB64,'Mikyla_English_Frostveil_Kingdom_SECURE.pdf','application/pdf');
-    });
-    return;
+    dlB64(enPdfB64,'Mikyla_English_Frostveil_Kingdom_SECURE_Charl_Tomlinson.pdf','application/pdf');
+  } else {
+    dlB64(afPdfB64,'Mikyla_Afrikaans_Ysgordyn_Land_SECURE_Charl_Tomlinson.pdf','application/pdf');
   }
-  dlB64(afPdfB64,'Mikyla_Afrikaans_SECURE_Charl_Tomlinson.pdf','application/pdf');
 }
+
 function downloadNewFullPdf(){
   const a=document.createElement('a');
   a.href='Mikyla_English_REAL_BOOK_COLOUR_Frostveil_Kingdom.pdf';
