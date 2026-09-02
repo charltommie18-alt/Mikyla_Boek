@@ -73,7 +73,7 @@
 <input id="capitecEmail" class="input" placeholder="Your email - Secure" type="email"><input id="capitecRef" class="input" placeholder="EFT Ref - Secure 1 book" type="text">
 <input id="popFile" type="file" accept="image/*,.pdf" style="width:100%;margin:2px 0;font-size:7px">
 <button id="capitecBtn" class="btn gold" style="opacity:0.5;font-size:8px" disabled onclick="submitCapitec()">🔒 Upload POP - Secure 1 book only</button>
-<div id="capitecStatus" style="font-size:6px;margin-top:2px;color:#facc15">SECURE: Pay for Afrikaans = Only Afrikaans unlocks - Cannot get English - Admin 12021 verifies book code secure</div></div></div>
+<div id="capitecStatus" style="font-size:6px;margin-top:2px;color:#facc15">Select book above → Pay Capitec 2557334258 → WhatsApp POP to 072 516 2740 → You get download link by email</div></div></div>
 
 <div id="lockedBox" class="lockedBox"><h3 style="font-size:10px">🔒 SECURE - REAL BOOKS LOCKED - 1 Book Paid = 1 Book Only</h3><p style="font-size:7px">Before bug: Paid 1 book could download all. Now FIXED: Locked to specific book code en/af/bundle - Secure</p></div>
 <div id="dlBox" class="unlockBox"><h3 style="color:#000;font-size:10px">✅ Verified Secure - Only Paid Book Unlocked!</h3><div id="dlContent"></div><div id="secureProof" style="font-size:7px;color:#0008;margin-top:5px"></div></div>
@@ -407,6 +407,9 @@ if(hasEJ){
   try{
     if(typeof emailjs!=='undefined'){emailjs.init({publicKey:cfg.publicKey});}
     const downloadLink = 'https://charltommie18-alt.github.io/Mikyla_Boek/download-secure.html?book='+bk+'&trans='+encodeURIComponent(tr)+'&email='+encodeURIComponent(em);
+    const fullMsg = 'Hi!\n\nThank you for buying '+bookName+' from Charl Tomlinson.\n\nPayment ref: '+tr+'\nBook code: '+bk+' (only this book unlocks)\n\nYour download link:\n'+downloadLink+'\n\nOpen the link, enter your email if asked, then download your PDF.\n\nCharl\ncharltommie18@gmail.com\n072 516 2740\nCapitec 2557334258';
+    if(!msg || msg.length<20){ msg = fullMsg; }
+
     emailjs.send(cfg.service,cfg.template,{
       to_email: em,
       email: em,
