@@ -84,7 +84,12 @@
 <p style="font-size:6px;color:#ffffff55">Enter PIN to unlock admin</p>
 </div>
 <div id="adminContent" style="display:none">
-<p style="font-size:7px;color:#94a3b8">Orders SECURE - Shows which book - 1 book paid = 1 book sent only - Cannot download all</p><div id="orderList"></div>
+<p style="font-size:7px;color:#94a3b8">Orders / Inbox — 1 book paid = 1 book only</p>
+<div style="display:flex;gap:6px;margin:4px 0;flex-wrap:wrap">
+<button type="button" class="btn dark" style="width:auto;padding:6px 10px;font-size:9px" onclick="clearOrderInbox()">🗑️ Clear inbox / orders</button>
+<button type="button" class="btn dark" style="width:auto;padding:6px 10px;font-size:9px" onclick="renderOrders()">🔄 Refresh</button>
+</div>
+<div id="orderList"></div>
 <div style="margin-top:5px;background:#ffffff0a;padding:5px;border-radius:6px">
 <h4 style="font-size:9px">📧 Send SECURE - 1 Book Paid = 1 Book Only - REAL BOOKS</h4>
 <p style="font-size:6px;color:#f87171">SECURITY FIXED: Only sends paid book code (en/af/bundle) - Customer cannot get all books if paid 1</p>
@@ -264,28 +269,25 @@ setTimeout(function(){banner.remove();},12000);
 
 function dlB64(b64, name, mime){
   try{
-    if(!b64||b64.length<50){alert('Book data missing');return;}
+    if(!b64||b64.length<50){alert('Book data missing — contact Charl 066 286 0284');return;}
     const byteChars=atob(b64);
-    const len=byteChars.length;
-    const bytes=new Uint8Array(len);
-    for(let i=0;i<len;i++) bytes[i]=byteChars.charCodeAt(i);
+    const bytes=new Uint8Array(byteChars.length);
+    for(let i=0;i<byteChars.length;i++) bytes[i]=byteChars.charCodeAt(i);
     const blob=new Blob([bytes],{type:mime||'application/pdf'});
     const url=URL.createObjectURL(blob);
+    // Method 1: download attribute
     const a=document.createElement('a');
     a.href=url;
     a.download=name||'Mikyla_Book.pdf';
-    a.style.display='none';
+    a.target='_blank';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    setTimeout(function(){URL.revokeObjectURL(url);},3000);
+    // Method 2: also open in new tab (helps mobile)
+    setTimeout(function(){ window.open(url,'_blank'); }, 300);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
   }catch(e){
-    try{
-      const a=document.createElement('a');
-      a.href='data:'+(mime||'application/pdf')+';base64,'+b64;
-      a.download=name||'Mikyla_Book.pdf';
-      document.body.appendChild(a);a.click();document.body.removeChild(a);
-    }catch(e2){alert('Download failed: '+e2);}
+    alert('Download error: '+e+' — WhatsApp 066 286 0284');
   }
 }
 
@@ -378,7 +380,11 @@ try{
   const book=params.get('book');
   const trans=params.get('trans');
   if(book && (book==='en'||book==='af'||book==='bundle') && trans){
-    setTimeout(()=>unlockWithBook(book,trans,'Customer link SECURE - book='+book+' trans='+trans),400);
+    setTimeout(function(){
+      unlockWithBook(book,trans,'Customer link SECURE - book='+book+' trans='+trans);
+      const box=document.getElementById('dlBox');
+      if(box){box.scrollIntoView({behavior:'smooth',block:'center'});}
+    },400);
   }
 }catch(e){}
 loadEmailJSCfg();
@@ -415,6 +421,14 @@ onCancel:()=>{document.getElementById('paypalStatus').textContent='Cancelled Sec
 function openAdmin(){document.getElementById('adminPanel').classList.add('show');loadEmailJSCfg();}
 function closeAdmin(){document.getElementById('adminPanel').classList.remove('show');}
 function checkPin(){if(document.getElementById('adminPin').value==='12021'){document.getElementById('adminLogin').style.display='none';document.getElementById('adminContent').style.display='block';document.getElementById('adminPin').value='';renderOrders();}else{alert('Wrong PIN Secure');}}
+function clearOrderInbox(){
+  if(!confirm('Clear ALL orders from admin inbox on this device?')) return;
+  orders=[];
+  localStorage.removeItem('mikyla_orders_secure_v1');
+  localStorage.removeItem('mikyla_orders');
+  renderOrders();
+  alert('Inbox cleared on this device.');
+}
 function renderOrders(){
 const list=document.getElementById('orderList');
 if(!orders.length){list.innerHTML='<p style=color:#94a3b8>No orders SECURE</p>';return;}
@@ -454,6 +468,15 @@ if(hasEJ){
   try{
     if(typeof emailjs!=='undefined'){emailjs.init({publicKey:cfg.publicKey});}
     const downloadLink = 'https://charltommie18-alt.github.io/Mikyla_Boek/?book='+bk+'&trans='+encodeURIComponent(tr)+'&email='+encodeURIComponent(em);
+    // Always notify ADMIN inbox email
+    try{
+      const fdA=new FormData();
+      fdA.append('_subject','Mikyla SENT to customer '+bk+' '+tr);
+      fdA.append('message','You sent book '+bk+' to '+em+'\nRef: '+tr+'\nLink: '+downloadLink);
+      fdA.append('customer',em);
+      fetch('https://formsubmit.co/ajax/charltommie18@gmail.com',{method:'POST',body:fdA}).catch(function(){});
+    }catch(e){}
+
     const fullMsg = 'Hi!\n\nThank you for buying '+bookName+' from Charl Tomlinson.\n\nPayment ref: '+tr+'\nBook code: '+bk+' (only this book unlocks)\n\nYour download link:\n'+downloadLink+'\n\nOpen the link, enter your email if asked, then download your PDF.\n\nCharl\ncharltommie18@gmail.com\n066 286 0284\nCapitec 2557334258';
     if(!msg || msg.length<20){ msg = fullMsg; }
 
@@ -465,7 +488,11 @@ if(hasEJ){
       from_name: 'Charl Tomlinson - Mikyla Books',
       reply_to: 'charltommie18@gmail.com',
       subject: 'Your Mikyla SECURE REAL BOOK - '+bookName+' - Code: '+bk,
-      message: msg,
+      message: (msg && msg.length>20 ? msg : fullMsg),
+      body: (msg && msg.length>20 ? msg : fullMsg),
+      download_link: downloadLink,
+      transaction_id: tr,
+      book_code: bk,
       book_name: bookName,
       book_code: bk,
       transaction_id: tr,
